@@ -65,6 +65,8 @@ async function onCreateTableSubmit(event: FormSubmitEvent<TableSchema>) {
       <UInput placeholder="Enter table name" v-model="createTableState.password" class="w-full" />
     </UFormField>
 
-    <UButton type="submit" size="lg" class="mt-4 text-center">Create Table</UButton>
+    <UButton type="submit" size="lg" trailing-icon="i-heroicons-plus-circle-solid">
+      Create Table
+    </UButton>
   </UForm>
 </template>

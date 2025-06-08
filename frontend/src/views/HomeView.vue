@@ -22,7 +22,7 @@ const tabs = [
     <UCard variant="soft">
       <div class="flex flex-col gap-6 w-sm">
         <span class="text-xl font-bold text-center mb-2">Mahjong.io</span>
-        <UTabs :items="tabs" class="w-full" :ui="{ trigger: 'grow' }">
+        <UTabs :items="tabs" class="w-full" variant="link" :ui="{ trigger: 'grow' }">
           <template #create>
             <CreateTableForm class="mt-4" />
           </template>

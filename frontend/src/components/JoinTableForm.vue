@@ -10,13 +10,20 @@ const tableSchema = v.object({
     v.regex(/^\S*$/, "Table name cannot contain spaces"),
     v.minLength(3, "Table name is required"),
     v.toLowerCase()
+  ),
+  password: v.pipe(
+    v.string(),
+    v.trim(),
+    v.regex(/^\S*$/, "Password cannot contain spaces"),
+    v.minLength(3, "Password must be at least 3 characters long")
   )
 })
 
 type TableSchema = v.InferOutput<typeof tableSchema>
 
 const joinTableState = reactive({
-  tableName: ""
+  tableName: "",
+  password: ""
 })
 
 const toast = useToast()
@@ -34,9 +41,22 @@ async function onJoinTableSubmit(event: FormSubmitEvent<TableSchema>) {
 </script>
 
 <template>
-  <UForm :schema="tableSchema" :state="joinTableState" @submit="onJoinTableSubmit">
+  <UForm
+    :schema="tableSchema"
+    :state="joinTableState"
+    @submit="onJoinTableSubmit"
+    class="space-y-4"
+  >
     <UFormField label="Join Table" name="tableName" size="xl">
       <UInput placeholder="Enter table name" v-model="joinTableState.tableName" class="w-full" />
     </UFormField>
+
+    <UFormField label="Password" name="password" size="xl">
+      <UInput placeholder="Enter table name" v-model="joinTableState.password" class="w-full" />
+    </UFormField>
+
+    <UButton type="submit" size="lg" trailing-icon="i-heroicons-arrow-right-circle-solid">
+      Join Table
+    </UButton>
   </UForm>
 </template>
