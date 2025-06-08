@@ -20,8 +20,8 @@ const tabs = [
 <template>
   <div class="flex flex-col items-center mt-50 h-screen">
     <UCard variant="soft">
-      <div class="flex flex-col gap-6 w-sm">
-        <span class="text-xl font-bold text-center mb-2">Mahjong.io</span>
+      <div class="flex flex-col w-sm">
+        <span class="text-3xl font-bold text-center my-4">Mahjong.io</span>
         <UTabs :items="tabs" class="w-full" variant="link" :ui="{ trigger: 'grow' }">
           <template #create>
             <CreateTableForm class="mt-4" />
