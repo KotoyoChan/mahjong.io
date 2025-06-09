@@ -7,15 +7,22 @@ const tableSchema = v.object({
   tableName: v.pipe(
     v.string(),
     v.trim(),
-    v.regex(/^\S*$/, "Table name cannot contain spaces"),
+    v.maxWords("en", 1, "Nickname cannot contain spaces"),
     v.minLength(3, "Table name is required"),
     v.toLowerCase()
   ),
   password: v.pipe(
     v.string(),
     v.trim(),
-    v.regex(/^\S*$/, "Password cannot contain spaces"),
+    v.maxWords("en", 1, "Nickname cannot contain spaces"),
     v.minLength(3, "Password must be at least 3 characters long")
+  ),
+  nickname: v.pipe(
+    v.string(),
+    v.trim(),
+    v.minLength(1, "Nickname is required"),
+    v.maxLength(20, "Nickname cannot exceed 20 characters"),
+    v.maxWords("en", 1, "Nickname cannot contain spaces")
   )
 })
 
@@ -23,7 +30,8 @@ type TableSchema = v.InferOutput<typeof tableSchema>
 
 const createTableState = reactive({
   tableName: "",
-  password: ""
+  password: "",
+  nickname: ""
 })
 
 const toast = useToast()
@@ -47,8 +55,16 @@ async function onCreateTableSubmit(event: FormSubmitEvent<TableSchema>) {
     @submit="onCreateTableSubmit"
     class="space-y-4"
   >
+    <UFormField label="Nickname" help="No spaces allowed" name="nickname" size="xl">
+      <UInput
+        placeholder="Give yourself a nickname"
+        v-model="createTableState.nickname"
+        class="w-full"
+      />
+    </UFormField>
+
     <UFormField
-      label="Create Table"
+      label="Table Name"
       help="Minimum 3 characters and no spaces"
       name="tableName"
       size="xl"
@@ -62,7 +78,7 @@ async function onCreateTableSubmit(event: FormSubmitEvent<TableSchema>) {
       name="password"
       size="xl"
     >
-      <UInput placeholder="Enter table name" v-model="createTableState.password" class="w-full" />
+      <UInput placeholder="Enter password" v-model="createTableState.password" class="w-full" />
     </UFormField>
 
     <UButton type="submit" size="lg" trailing-icon="i-heroicons-plus-circle-solid">

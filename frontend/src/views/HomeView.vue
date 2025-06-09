@@ -1,5 +1,9 @@
 <script setup lang="ts">
 import type { TabsItem } from "@nuxt/ui"
+import usePlayerId from "@composables/usePlayerId"
+
+const { playerId } = usePlayerId()
+console.log("Player ID:", playerId)
 
 const tabs = [
   {
