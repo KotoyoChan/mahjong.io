@@ -1,29 +1,41 @@
-import express from "express";
-import { createServer } from "node:http";
-import { Server } from "socket.io";
+import express from 'express'
+import { createServer } from 'node:http'
+import { Server } from 'socket.io'
+import cookieParser from 'cookie-parser'
+import cors from 'cors'
+import { playerMiddleware } from './middleware/playerMiddleware.js'
+import gameRoutes from './routes/gameRoutes.js'
 
-const app = express();
-const server = createServer(app);
+const app = express()
+const server = createServer(app)
 const io = new Server(server, {
   cors: {
-    origin: "*", // change for production
-  },
-});
+    origin: 'http://localhost:5173', // change for production
+    credentials: true // allow cookies to be sent with requests
+  }
+})
 
-const PORT = process.env.PORT || 3000;
+app.use(express.json())
+app.use(cookieParser())
+app.use(
+  cors({
+    origin: 'http://localhost:5173', // change for production
+    credentials: true // allow cookies to be sent with requests
+  })
+)
 
-io.on("connection", (socket) => {
-  console.log("A user connected");
+app.use('/api/', gameRoutes)
 
-  socket.on("disconnect", () => {
-    console.log("A user disconnected");
-  });
-});
+const PORT = process.env.PORT || 3000
 
-app.route("/").get((req, res) => {
-  res.send("Hello, World!");
-});
+io.on('connection', (socket) => {
+  console.log('A user connected')
+
+  socket.on('disconnect', () => {
+    console.log('A user disconnected')
+  })
+})
 
 server.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`);
-});
+  console.log(`Server is running on port ${PORT}`)
+})
