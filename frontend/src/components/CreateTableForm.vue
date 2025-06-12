@@ -2,6 +2,7 @@
 import { reactive } from "vue"
 import * as v from "valibot"
 import type { FormSubmitEvent } from "@nuxt/ui"
+import { useFetch } from "@vueuse/core"
 
 const tableSchema = v.object({
   tableName: v.pipe(
@@ -37,7 +38,29 @@ const createTableState = reactive({
 const toast = useToast()
 async function onCreateTableSubmit(event: FormSubmitEvent<TableSchema>) {
   event.preventDefault()
-  const { tableName } = event.data
+  const { tableName, password, nickname } = event.data
+
+  const { data, error } = await useFetch("http://localhost:3000/api/create", {
+    async beforeFetch({ options }) {
+      options.credentials = "include"
+    }
+  }).post({
+    tableName,
+    password,
+    nickname
+  })
+
+  if (error.value) {
+    toast.add({
+      title: "Error",
+      description: error.value.message || "Failed to create table",
+      color: "error"
+    })
+    return
+  }
+
+  console.log("Table created:", data.value)
+
   // Handle table creation logic here
   toast.add({
     title: "Table Created",
@@ -78,7 +101,12 @@ async function onCreateTableSubmit(event: FormSubmitEvent<TableSchema>) {
       name="password"
       size="xl"
     >
-      <UInput placeholder="Enter password" v-model="createTableState.password" class="w-full" />
+      <UInput
+        type="password"
+        placeholder="Enter password"
+        v-model="createTableState.password"
+        class="w-full"
+      />
     </UFormField>
 
     <UButton type="submit" size="lg" trailing-icon="i-heroicons-plus-circle-solid">

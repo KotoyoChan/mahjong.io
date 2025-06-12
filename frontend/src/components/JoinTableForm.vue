@@ -68,7 +68,12 @@ async function onJoinTableSubmit(event: FormSubmitEvent<TableSchema>) {
     </UFormField>
 
     <UFormField label="Password" name="password" size="xl">
-      <UInput placeholder="Enter password" v-model="joinTableState.password" class="w-full" />
+      <UInput
+        type="password"
+        placeholder="Enter password"
+        v-model="joinTableState.password"
+        class="w-full"
+      />
     </UFormField>
 
     <UButton type="submit" size="lg" trailing-icon="i-heroicons-arrow-right-circle-solid">
